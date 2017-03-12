@@ -51,7 +51,7 @@ c.alert_policy: 0
 c.create()
 ```
 
-Refers to [this page] for the [list of options](https://www.pingdom.com/resources/api#MethodCreate+New+Check).
+Refers to [this page](https://www.pingdom.com/resources/api#MethodCreate+New+Check) for the list of options.
 
 `alert_policy`: can be set to the `id` of an existing alert policy or to `0`for disabling alerts  
 
@@ -70,7 +70,7 @@ c.modify()
 
 # Maintenance windows
 
-Since Pingdom don't allow to create maintenance windows through the REST Api, we interact with the Website for it. Therefore you this feature is hightly fragile and can break at any monment due to frontent changes on Pingdom 
+Since Pingdom don't allow to create maintenance windows through the REST Api, we interact with the Website for it. Therefore this feature is hightly fragile and can break at any monment due to frontent changes on Pingdom 
 website.
 
 ## Check maintenance:
