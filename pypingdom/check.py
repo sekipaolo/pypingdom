@@ -1,70 +1,65 @@
-from maintenance import Maintenance
-
-
 class Check(object):
 
-    def __init__(self, client, name, obj=False):
+    SKIP_ON_PRINT = ["cached_definition", "_id", "client"]
+    SKIP_ON_JSON = [
+        "client", "alert_policy_name", "cached_definition", "created", "lastresponsetime",
+        "lasttesttime", "_id", "id", "status"
+    ]
+
+    def __init__(self, client, name, json=False, obj=False):
         self.client = client
         self.name = name
-        if obj:
-            self.from_json(obj)
+        if json:
+            self.from_json(json)
+        elif obj:
+            self.from_obj(obj)
         else:
-            self.fetch()
+            raise "Missing check definition: use json or obj parameter"
 
     def __repr__(self):
-        vals =["{0}: '{1}'".format(k, v) for k, v in self.__dict__.items()]
-        return "pingdom.Check:\n\t{0}".format("\n\t".join(vals))
-
-    def from_json(self, obj):
-        for k, v in obj.items():
-            if k == "id":
-                self._id = str(obj['id'])
-            elif k in ['tags', "contactids"]:
-                setattr(self, k, v.split(","))
-            else:
-                setattr(self, k, v)
+        attr = ["{0}: {1} ".format(k, v) for k, v in self.__dict__.items() if k not in self.SKIP_ON_PRINT]
+        return "pingdom.Check <%s> \n  %s" % (self._id, "\n  ".join(attr))
 
     def to_json(self):
         obj = {}
         for k, v in self.__dict__.items():
-            if k in ['tags', "contactids"]:
-                obj[k] = ",".join(v)
-            elif k == "hostname":
-                obj['host'] = v
-            elif k in ["alert_policy_name", "client", "status", "_id", "lasttesttime", "lastresponsetime", "lasterrortime", "created", "type"]:
+            if k in self.SKIP_ON_JSON:
                 pass
+            elif k == "tags":
+                obj["tags"] = ",".join(v)
+            elif k == "requestheaders":
+                i = 0
+                for x, y in v.items():
+                    obj["requestheader" + str(i)] = x + ":" + y
+                    i = i + 1
             else:
                 obj[k] = v
         return obj
 
+    def from_json(self, obj):
+        for k, v in obj.items():
+            if k == "tags":
+                self.tags = [x["name"] for x in v]
+            elif k == "hostname":
+                self.host = v
+            elif k == "id":
+                self._id = v
+            elif k == "status":
+                if v == "paused":
+                    self.paused = True
+                else:
+                    self.paused = False
+            elif k == "type" and type(k) is dict:
+                self.type = v.keys()[0]
+                for x, y in v[self.type].items():
+                    setattr(self, x, y)
+            else:
+                setattr(self, k, v)
+
+    def from_obj(self, obj):
+        for k, v in obj.items():
+            setattr(self, k, v)
+
     def fetch(self):
-        for item in self.client.send('get', "checks")['checks']:
-            if item['name'] == self.name:
-                self.from_json(item)
-
-    def create(self):
-        data = self.to_json()
-        data['type'] = self.type
-        self.client.send(method='post', resource='checks', data=data)
-        self.fetch()
-
-    def modify(self):
-        self.client.send(method='put', resource='checks', resource_id=self._id, data=self.to_json())
-        self.fetch()
-
-    def unpause(self):
-        self.paused = "false"
-        self.modify()
-
-    def pause(self):
-        self.paused = "true"
-        self.modify()
-
-    def delete(self):
-        if not self._id:
-            raise "CheckNotFound"
-        self.client.send(method='delete', resource='checks', resource_id=self._id)
-
-    def create_maintenance(self, description, start, stop):
-        m = Maintenance(self.client.username, self.client.password)
-        m.create(description, start, stop, [self._id])
+        res = self.client.api.send('get', "checks", self._id)['check']
+        self.from_json(res)

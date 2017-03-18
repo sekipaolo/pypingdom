@@ -6,7 +6,7 @@ extra = {}
 if sys.version_info >= (3,):
     extra['use_2to3'] = True
 
-setup(name='pingdom',
+setup(name='pypingdom',
       version="0.0.1",
       description='Client for Pingdom Services',
       long_description="""3rd-party Python interface to Pingdom services (REST API and maintenance windows).""",

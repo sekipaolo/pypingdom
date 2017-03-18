@@ -1,45 +1,85 @@
-import requests
-from requests.auth import HTTPBasicAuth
-from exception import ApiError
-from maintenance import Maintenance
+from api import Api
+from gui import Gui
 from check import Check
-
-BASE_URL = 'https://api.pingdom.com/api'
 
 
 class Client(object):
-
+    """ Interact with API and GUI """
     def __init__(self, username, password, apikey, email, api_version='2.0'):
+        """
+        :param username: account main email
+        :param password: account password
+        :param apikey: Pingdom api key
+        :param email: required for `Multi-User Authentication <https://www.pingdom.com/resources/api#multi-user+authentication>`_.
+        """
         self.username = username
         self.password = password
         self.apikey = apikey
         self.email = email
-        self.init_api(api_version)
-        self._checks = None
+        self.api = Api(username, password, apikey, email, api_version)
+        self.gui = Gui(username, password)
+        # cache checks
+        self.checks = {}
+        for item in self.api.send('get', "checks", params={"include_tags": True})['checks']:
+            self.checks[item["name"]] = Check(self, name=item["name"], json=item)
 
-    def init_api(self, version):
-        self.base_url = BASE_URL + "/" + version + "/"
-        self.auth = HTTPBasicAuth(self.username, self.password)
-        self.headers = {'App-Key': self.apikey}
-        if self.email:
-            self.headers['Account-Email'] = self.email
+    def get_check(self, name):
+        return self.checks.get(name, None)
 
-    def send(self, method, resource, resource_id="", data={}, params={}):
-        try:
-            response = requests.request(method, self.base_url + resource + "/" + resource_id, auth=self.auth, headers=self.headers, data=data)
-        except requests.exceptions.RequestException, e:
-            raise ApiError(e)
-        if response.status_code != 200:
-            raise Exception(response.text)
-        else:
-            return response.json()
+    def get_checks(self, filters):
+        res = []
+        for name, check in self.checks.items():
+            if "tags" in filters and len(set(filters["tags"]).intersection(set(check.tags))) == 0:
+                continue
+            res.append(check)
+        return res
+
+    def create_check(self, name, obj):
+        c = Check(self, name, obj=obj)
+        data = c.to_json()
+        response = self.api.send(method='post', resource='checks', data=data)
+        c._id = int(response["check"]["id"])
+        c.fetch()
+        self.checks[name] = c
+        return c
+
+    def delete_check(self, check):
+        if not check._id:
+            raise "CheckNotFound %s" + check.name
+        self.api.send(method='delete', resource='checks', resource_id=check._id)
+        self.checks.pop(check.name, None)
+
+    def update_check(self, check, obj):
+        # ensure definition is updated
+        check.fetch()
+        # cache current definition to detect idempotency when modify is called
+        cached_definition = check.to_json()
+        check.from_obj(obj)
+        data = check.to_json()
+        if data == cached_definition:
+            return False
+        del data["type"]  # type can't be changed
+        self.api.send(method='put', resource='checks', resource_id=check._id, data=data)
+        check.fetch()
+        return check
+
+    def get_maintenances(self, filters={}):
+        if "check_names" in filters:
+            filters["check_ids"] = filters.get("check_ids", []) + self.check_ids_from_names(filters["check_names"])
+            del filters["check_names"]
+        return self.gui.get_maintenances(filters)
 
     def create_maintenance(self, description, start, stop, check_names):
-        m = Maintenance(self.username, self.password)
+        self.gui.create_maintenance(description, start, stop, self.check_ids_from_names(check_names))
+
+    def delete_maintenance(self, _id):
+        self.gui.delete_maintenance(_id)
+
+    def check_ids_from_names(self, names):
         ids = []
-        for name in check_names:
-            check = Check(self, name)
-            if not check._id:
+        for name in names:
+            check = self.get_check(name)
+            if check is None:
                 raise("Check Not Found: " + name)
-            ids.append(check._id)
-        m.create(description, start, stop, ids)
+            ids.append(str(check._id))
+        return ids
