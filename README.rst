@@ -48,7 +48,11 @@ The `client` object will allow you to interact both with the REST Api and the GU
 
 the `email` parameter is required for `Multi-User Authentication <https://www.pingdom.com/resources/api#multi-user+authentication>`_.
 
-since Pingdom do not treat the check name as identifier (as we probably want to do) the client object will retrieve the check list from the API and cache it as dict ( check_name => check_instance). You can access it through the `checks` atrribute:
+Checks
+-------------------------------------
+
+
+Since Pingdom do not treat the check name as identifier (as we probably want to do) the client object will retrieve the check list from the API and cache it as dict ( check_name => check_instance). You can access it through the `checks` atrribute:
 
 .. code-block:: python
 
@@ -124,12 +128,31 @@ Delete a check:
     >>> client.delete_check(check)
 
 
-Maintenance window
+Maintenance windows
 -------------------------------------
+
+Retrive maintenances windows for production websites in the last 7 days
 
 .. code-block:: python
 
-    >>> from datetime import datetime
-    >>> client.get_maintenances(filters={"check_names": ["check_1", "check_2"]}):
-    >>> mid = client.create_maintenance("Global maintenance", datetime(2017,10,12,22,0), datetime(2017,10,12,23,30), ["check1", "check2", "check3"]):
-    >>> client.delete_maintenance(self, mid)
+    >>> import datetime
+    >>> checks = client.get_checks(filters={"tags": ["production": "frontend"]})
+    >>> start = datetime.datetime.now() - datetime.timedelta(days=7)
+    >>> client.get_maintenances(checks=checks, filters={"after": start}):
+
+Create a 1 hour maintenance window for production websites
+
+.. code-block:: python
+
+    >>> start = datetime.datetime.now() + datetime.timedelta(minutes=10)
+    >>> end = start + datetime.timedelta(hours=1)
+
+    >>> window = client.create_maintenance({"checks": checks, "name": "pypyngdom test maintenance", "start": start, "stop": stop})
+
+Delete futures maintenance windows
+
+.. code-block:: python
+
+    >>> windows = client.get_maintenances(checks=checks, filters={"after": datetime.datetime.now()}):
+    >>> for m in maintenances:
+        client.delete_maintenance(m)

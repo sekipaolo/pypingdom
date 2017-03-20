@@ -1,11 +1,22 @@
 import requests
-import time
-import datetime
-from maintenance import Maintenance
+import json
 
 
 class PingdomGuiException(Exception):
-    pass
+
+    def __init__(self, http_response):
+        content = json.loads(http_response.content)
+        self.status_code = http_response.status_code
+        self.status_desc = content['error']['statusdesc']
+        self.error_message = content['error']['errormessage']
+        super(PingdomGuiException, self).__init__(self.__str__())
+
+    def __repr__(self):
+        return 'pingdom.PingdomGuiException: HTTP `%s - %s` returned with message, "%s"' % \
+               (self.status_code, self.status_desc, self.error_message)
+
+    def __str__(self):
+        return self.__repr__()
 
 
 class Gui():
@@ -31,58 +42,9 @@ class Gui():
     def send(self, method, url, data={}, params={}):
         response = self.session.request(method, url, data=data, params=params, headers=self.headers)
         if response.status_code != 200:
-            dt = "\n".join(["{0}: {1} ".format(k, v) for k, v in data.items()])
-            hd = "\n".join(["{0}: {1} ".format(k, v) for k, v in self.headers.items()])
-            msg = " \n  url: %s \n  method: %s \n  data: %s \n  response: %s \n  headers: %s" % (url, dt, method, response.text, hd)
-            raise PingdomGuiException(msg)
+            raise PingdomGuiException(response)
         return response
 
     def login(self):
         data = {"email": self.__username, "password": self.__password}
         self.send('post', 'https://my.pingdom.com/', data)
-
-    def create_maintenance(self, description, start, stop, checks):
-        self.login()
-        data = {
-            "__csrf_magic": "",
-            "id": "",
-            "description": description,
-            "from-date": "{0}.{1}.{2}.".format(start.year, start.month, start.day),
-            "from-time": "{0}:{1}".format(start.hour, start.minute),
-            "to-date": "{0}.{1}.{2}.".format(stop.year, stop.month, stop.day),
-            "to-time": "{0}:{1}".format(stop.hour, stop.minute),
-            "start": int(time.mktime(start.timetuple())),
-            "end": int(time.mktime(stop.timetuple())),
-            "checks": "[{0}]".format(",".join(checks))
-        }
-        self.login()
-        response = self.send("post", "https://my.pingdom.com/ims/data/maintenance", data)
-        return response.json()["checks_maintenance"]["id"]
-
-    def get_maintenances(self, filters={}):
-        self.login()
-        response = self.send("get", "https://my.pingdom.com/newims/maintenance/xhr?limit=10000&page_id=1&_=1489571119019")
-        res = []
-        for m in response.json()['events']:
-            window = {
-                "description": m["description"],
-                "start": datetime.datetime.fromtimestamp(m['start']),
-                "stop": datetime.datetime.fromtimestamp(m['end']),
-                "check_ids": [int(x['compound_id']) for x in m['checks']],
-                "_id": int(m['id'])}
-            if "check_ids" in filters:
-                if len(set(filters["check_ids"]).intersection(set(window["check_ids"]))) == 0:
-                    continue
-            if "names" in filters and window["description"] not in filters['names']:
-                continue
-            if "since" in filters and filters["since"] < window["start"]:
-                continue
-            if "before" in filters and filters["before"] > window["stop"]:
-                continue
-
-            res.append(window)
-        return res
-
-    def delete_maintenance(self, _id):
-        self.login()
-        self.send("delete", "https://my.pingdom.com/ims/data/maintenance", params={"id": _id})

@@ -66,26 +66,27 @@ def delete_check():
 
 def create_maintenance():
     global client, check_definition
-    start = datetime.datetime.now() + datetime.timedelta(minutes=10)
+    check = client.get_check(check_definition["name"])
+    start = datetime.datetime.now() + datetime.timedelta(days=2)
     stop = start + datetime.timedelta(minutes=20)
-    print("creating maintenance for check %s" % check_definition["name"])
-    mid = client.create_maintenance(description="pypyngdom test maintenance",
-                                    start=start,
-                                    stop=stop,
-                                    check_names=[check_definition["name"]])
-    return mid
+    print("creating maintenance for check %s" % check.name)
+    window = client.create_maintenance({"checks": [check], "name": "pypyngdom test maintenance", "start": start, "stop": stop})
+    return window
 
 
 def delete_maintenance(mid):
-    client.delete_maintenance(mid)
+    check = client.get_check(check_definition["name"])
+    for m in client.get_maintenances(check):
+        print("deleting maintenance %s" % m.name)
+        client.delete_maintenance(m)
 
 
 create_check()
 raw_input("Continue?")
 update_check()
 raw_input("Continue?")
-mid = create_maintenance()
+create_maintenance()
 raw_input("Continue?")
-delete_maintenance(mid)
+delete_maintenance()
 raw_input("Continue?")
 delete_check()

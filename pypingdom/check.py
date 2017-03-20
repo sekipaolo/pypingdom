@@ -7,7 +7,7 @@ class Check(object):
     ]
 
     def __init__(self, client, name, json=False, obj=False):
-        self.client = client
+        self.api = client.api
         self.name = name
         if json:
             self.from_json(json)
@@ -18,7 +18,7 @@ class Check(object):
 
     def __repr__(self):
         attr = ["{0}: {1} ".format(k, v) for k, v in self.__dict__.items() if k not in self.SKIP_ON_PRINT]
-        return "pingdom.Check <%s> \n  %s" % (self._id, "\n  ".join(attr))
+        return "\npingdom.Check <%s> \n  %s" % (self._id, "\n  ".join(attr))
 
     def to_json(self):
         obj = {}
@@ -61,5 +61,5 @@ class Check(object):
             setattr(self, k, v)
 
     def fetch(self):
-        res = self.client.api.send('get', "checks", self._id)['check']
+        res = self.api.send('get', "checks", self._id)['check']
         self.from_json(res)

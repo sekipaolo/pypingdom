@@ -1,17 +1,6 @@
 import requests
 from requests.auth import HTTPBasicAuth
-
-try:
-    from urllib2 import HTTPError
-except:
-    from urllib.error import HTTPError
-
-try:
-    import json
-except:
-    import simplejson as json
-
-BASE_URL = ''
+import json
 
 
 class ApiError(Exception):
