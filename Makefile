@@ -12,7 +12,11 @@ BUILDDIR      = docs/build
 help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-.PHONY: help Makefile tests
+.PHONY: help Makefile tests push
+
+push:
+	python setup.py register -r pypi
+	python setup.py sdist upload -r pypi
 
 tests:
 	python testing/test_check.py
