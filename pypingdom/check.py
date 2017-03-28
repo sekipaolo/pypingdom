@@ -1,13 +1,13 @@
 class Check(object):
 
-    SKIP_ON_PRINT = ["cached_definition", "_id", "client"]
+    SKIP_ON_PRINT = ["cached_definition", "_id", "api"]
     SKIP_ON_JSON = [
-        "client", "alert_policy_name", "cached_definition", "created", "lastresponsetime",
+        "api", "alert_policy_name", "cached_definition", "created", "lastresponsetime",
         "lasttesttime", "_id", "id", "status"
     ]
 
-    def __init__(self, client, name, json=False, obj=False):
-        self.api = client.api
+    def __init__(self, api, name, json=False, obj=False):
+        self.api = api
         self.name = name
         if json:
             self.from_json(json)
@@ -40,6 +40,8 @@ class Check(object):
         for k, v in obj.items():
             if k == "tags":
                 self.tags = [x["name"] for x in v]
+            if k == "name":
+                self.name = v.lower()
             elif k == "hostname":
                 self.host = v
             elif k == "id":

@@ -22,7 +22,7 @@ class Client(object):
         # cache checks
         self.checks = {}
         for item in self.api.send('get', "checks", params={"include_tags": True})['checks']:
-            self.checks[item["name"]] = Check(self, name=item["name"], json=item)
+            self.checks[item["name"].lower()] = Check(self.api, name=item["name"], json=item)
 
     def get_check(self, name=None, _id=None):
         if name:
@@ -34,7 +34,7 @@ class Client(object):
         else:
             raise "Missing name or _id"
 
-    def get_checks(self, filters):
+    def get_checks(self, filters={}):
         res = []
         for name, check in self.checks.items():
             if "tags" in filters and len(set(filters["tags"]).intersection(set(check.tags))) == 0:
@@ -43,7 +43,7 @@ class Client(object):
         return res
 
     def create_check(self, name, obj):
-        c = Check(self, name, obj=obj)
+        c = Check(self.api, name, obj=obj)
         data = c.to_json()
         response = self.api.send(method='post', resource='checks', data=data)
         c._id = int(response["check"]["id"])
