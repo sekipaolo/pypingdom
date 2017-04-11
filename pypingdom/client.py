@@ -82,7 +82,7 @@ class Client(object):
                 if len(set(wanted_ids).intersection(set(got_ids))) == 0:
                     continue
             window = Maintenance(self, json=obj)
-            if "names" in filters and window["name"] not in filters['names']:
+            if "names" in filters and window.name not in filters['names']:
                 continue
             if "after" in filters and filters["after"] > window.start:
                 continue
