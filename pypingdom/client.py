@@ -86,7 +86,7 @@ class Client(object):
                 continue
             if "after" in filters and filters["after"] >= window.start:
                 continue
-            if "before" in filters and filters["before"] <= window.end:
+            if "before" in filters and filters["before"] <= window.stop:
                 continue
             res.append(window)
         return res
