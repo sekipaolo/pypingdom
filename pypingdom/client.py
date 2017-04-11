@@ -84,9 +84,9 @@ class Client(object):
             window = Maintenance(self, json=obj)
             if "names" in filters and window.name not in filters['names']:
                 continue
-            if "after" in filters and filters["after"] > window.start:
+            if "after" in filters and filters["after"] >= window.start:
                 continue
-            if "before" in filters and filters["before"] < window.end:
+            if "before" in filters and filters["before"] <= window.end:
                 continue
             res.append(window)
         return res
