@@ -76,7 +76,7 @@ def create_maintenance():
 
 def delete_maintenance(mid):
     check = client.get_check(check_definition["name"])
-    for m in client.get_maintenances(check):
+    for m in client.get_maintenances(filters={"checks": [check]}):
         print("deleting maintenance %s" % m.name)
         client.delete_maintenance(m)
 

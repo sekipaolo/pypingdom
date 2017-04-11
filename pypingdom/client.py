@@ -71,20 +71,16 @@ class Client(object):
         check.fetch()
         return check
 
-    def get_maintenances(self, checks, filters={}):
-        if type(checks) is list:
-            wanted_ids = [check._id for check in checks]
-        elif type(checks) is Check:
-            wanted_ids = [checks._id]
-        else:
-            raise "Wrong type %s for checks parameter" % str(type(checks))
+    def get_maintenances(self, filters={}):
         self.gui.login()
         response = self.gui.send("get", "https://my.pingdom.com/newims/maintenance/xhr?limit=10000&page_id=1&_=1489571119019")
         res = []
         for obj in response.json()['events']:
-            got_ids = [int(x['compound_id']) for x in obj['checks']]
-            if len(set(wanted_ids).intersection(set(got_ids))) == 0:
-                continue
+            if "checks" in filters:
+                wanted_ids = [check._id for check in filters['checks']]
+                got_ids = [int(x['compound_id']) for x in obj['checks']]
+                if len(set(wanted_ids).intersection(set(got_ids))) == 0:
+                    continue
             window = Maintenance(self, json=obj)
             if "names" in filters and window["name"] not in filters['names']:
                 continue
