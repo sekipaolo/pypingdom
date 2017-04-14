@@ -51,6 +51,7 @@ class Check(object):
                     self.paused = True
                 else:
                     self.paused = False
+                self.status = v
             elif k == "type" and type(k) is dict:
                 self.type = v.keys()[0]
                 for x, y in v[self.type].items():
