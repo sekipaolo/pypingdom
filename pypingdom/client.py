@@ -1,7 +1,7 @@
-from api import Api
-from gui import Gui
-from check import Check
-from maintenance import Maintenance
+from .api import Api
+from .gui import Gui
+from .check import Check
+from .maintenance import Maintenance
 
 
 class Client(object):

@@ -3,6 +3,9 @@ import yaml
 import sys
 import datetime
 sys.path.append("../pypingdom")
+
+from six.moves import input
+
 import pypingdom
 
 with open("private_test_data.yml", 'r') as stream:
@@ -82,11 +85,11 @@ def delete_maintenance(mid):
 
 
 create_check()
-raw_input("Continue?")
+input("Continue?")
 update_check()
-raw_input("Continue?")
+input("Continue?")
 create_maintenance()
-raw_input("Continue?")
+input("Continue?")
 delete_maintenance()
-raw_input("Continue?")
+input("Continue?")
 delete_check()
