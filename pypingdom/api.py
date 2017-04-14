@@ -1,6 +1,7 @@
+import json
+
 import requests
 from requests.auth import HTTPBasicAuth
-import json
 
 
 class ApiError(Exception):
@@ -30,7 +31,9 @@ class Api(object):
             self.headers['Account-Email'] = email
 
     def send(self, method, resource, resource_id="", data={}, params={}):
-        response = requests.request(method, self.base_url + resource + "/" + str(resource_id), auth=self.auth, headers=self.headers, data=data, params=params)
+        response = requests.request(method, self.base_url + resource + "/"
+                                    + str(resource_id), auth=self.auth,
+                                    headers=self.headers, data=data, params=params)
         if response.status_code != 200:
             raise ApiError(response)
         else:
