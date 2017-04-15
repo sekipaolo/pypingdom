@@ -21,5 +21,8 @@ setup(name='pypingdom',
                    'Intended Audience :: System Administrators',
                    'License :: OSI Approved :: Apache Software License',
                    'Operating System :: OS Independent',
-                   'Topic :: System :: Monitoring', ]
+                   'Topic :: System :: Monitoring',
+                   'Programming Language :: Python :: 2',
+                   'Programming Language :: Python :: 3'
+                   ]
       )
