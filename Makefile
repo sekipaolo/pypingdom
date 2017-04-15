@@ -17,6 +17,7 @@ help:
 push:
 	python setup.py register -r pypi
 	python setup.py sdist upload -r pypi
+	python setup.py bdist_wheel upload -r pypi
 
 tests:
 	python testing/test_check.py
