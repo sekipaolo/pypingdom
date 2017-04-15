@@ -156,4 +156,3 @@ texinfo_documents = [
 ]
 
 suppress_warnings = ['image.nonlocal_uri']
-
