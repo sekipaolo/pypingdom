@@ -154,3 +154,6 @@ texinfo_documents = [
      author, 'pypingdom', 'One line description of project.',
      'Miscellaneous'),
 ]
+
+suppress_warnings = ['image.nonlocal_uri']
+
