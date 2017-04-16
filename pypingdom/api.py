@@ -1,6 +1,7 @@
+import json
+
 import requests
 from requests.auth import HTTPBasicAuth
-import json
 
 
 class ApiError(Exception):
@@ -32,7 +33,7 @@ class Api(object):
     def send(self, method, resource, resource_id=None, data={}, params={}):
         if resource_id is not None:
             resource = "%s/%s" % (resource, resource_id)
-        response = requests.request(method, self.base_url + resource + "/",
+        response = requests.request(method, self.base_url + resource,
                                     auth=self.auth,
                                     headers=self.headers,
                                     data=data,

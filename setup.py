@@ -1,15 +1,20 @@
+import os
 
-import sys
 from setuptools import setup
+# from setuptools.config import read_configuration  # only works in newer setuptools
+# conf = read_configuration("setup.cfg")
+#       long_description=conf['metadata']['long_description'],
 
-extra = {}
-if sys.version_info >= (3,):
-    extra['use_2to3'] = True
+BASEDIR = os.path.dirname(__file__)
+
+with open(os.path.join(BASEDIR, 'README.rst'), 'r') as f:
+    README = f.read()
+
 
 setup(name='pypingdom',
       version="0.0.6",
       description='Client for Pingdom Services',
-      long_description="""3rd-party Python interface to Pingdom services (REST API and maintenance windows).""",
+      long_description=README,
       author='Paolo Sechi',
       author_email='sekipaolo@gmail.com',
       install_requires=['requests>=0.10.8', 'six>=1.10.0'],
@@ -17,11 +22,14 @@ setup(name='pypingdom',
       packages=['pypingdom'],
       license='Apache v2.0',
       platforms='Posix; MacOS X; Windows',
+      zip_safe=True,
       classifiers=['Development Status :: 3 - Alpha',
                    'Intended Audience :: Developers',
                    'Intended Audience :: System Administrators',
                    'License :: OSI Approved :: Apache Software License',
                    'Operating System :: OS Independent',
-                   'Topic :: System :: Monitoring', ],
-      **extra
+                   'Topic :: System :: Monitoring',
+                   'Programming Language :: Python :: 2',
+                   'Programming Language :: Python :: 3'
+                   ]
       )

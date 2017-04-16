@@ -1,12 +1,11 @@
 #!/usr/sbin/env python
 import yaml
-import sys
 import datetime
-sys.path.append("../pypingdom")
 
 from six.moves import input
 
 import pypingdom
+
 
 with open("private_test_data.yml", 'r') as stream:
     auth = yaml.load(stream)
@@ -19,7 +18,7 @@ client = pypingdom.Client(username=auth["username"],
 check_definition = {
     "name": "Ansible integration test",
     "paused": True,
-    #"alert_policy": "",
+    # "alert_policy": "",
     "type": "http",
     "host": "www.google.com",
     "url": "/",
@@ -73,7 +72,12 @@ def create_maintenance():
     start = datetime.datetime.now() + datetime.timedelta(days=2)
     stop = start + datetime.timedelta(minutes=20)
     print("creating maintenance for check %s" % check.name)
-    window = client.create_maintenance({"checks": [check], "name": "pypyngdom test maintenance", "start": start, "stop": stop})
+    window = client.create_maintenance({
+                                        "checks": [check],
+                                        "name": "pypyngdom test maintenance",
+                                        "start": start,
+                                        "stop": stop
+                                       })
     return window
 
 
