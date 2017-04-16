@@ -11,7 +11,8 @@ class Client(object):
         :param username: account main email
         :param password: account password
         :param apikey: Pingdom api key
-        :param email: required for `Multi-User Authentication <https://www.pingdom.com/resources/api#multi-user+authentication>`_.
+        :param email: required for `Multi-User Authentication
+                      <https://www.pingdom.com/resources/api#multi-user+authentication>`_.
         """
         self.username = username
         self.password = password
@@ -73,7 +74,8 @@ class Client(object):
 
     def get_maintenances(self, filters={}):
         self.gui.login()
-        response = self.gui.send("get", "https://my.pingdom.com/newims/maintenance/xhr?limit=10000&page_id=1&_=1489571119019")
+        url = "https://my.pingdom.com/newims/maintenance/xhr?limit=10000&page_id=1&_=1489571119019"
+        response = self.gui.send("get", url)
         res = []
         for obj in response.json()['events']:
             if "checks" in filters:

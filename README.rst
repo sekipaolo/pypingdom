@@ -1,6 +1,12 @@
 Pypingdom
 =====================================
 
+.. image:: https://travis-ci.org/sekipaolo/pypingdom.svg?branch=master
+    :target: https://travis-ci.org/sekipaolo/pypingdom
+
+.. image:: https://badge.fury.io/py/pypingdom.svg
+    :target: https://badge.fury.io/py/pypingdom
+
 Python library for interact with Pingdom services (REST API and maintenance windows).
 
 

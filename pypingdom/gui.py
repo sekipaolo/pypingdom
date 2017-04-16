@@ -26,6 +26,8 @@ class Gui():
         self.__username = username
         self.__password = password
         self.session = requests.session()
+        _ua = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 " \
+              + "(KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36"
         self.headers = {
             "accept": "*/*",
             "accept-encoding": "gzip, deflate, br",
@@ -35,7 +37,7 @@ class Gui():
             "origin": "https://my.pingdom.com",
             "pragma": "no-cache",
             "referer": "https://my.pingdom.com/",
-            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+            "user-agent": _ua,
             "x-requested-with": "XMLHttpRequest"
         }
 
