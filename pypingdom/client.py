@@ -101,3 +101,6 @@ class Client(object):
     def delete_maintenance(self, window):
         self.gui.login()
         self.gui.send("delete", "https://my.pingdom.com/ims/data/maintenance", params={"id": window._id})
+
+    def servertime(self):
+        return self.api.send(method='get', resource='servertime')['servertime']

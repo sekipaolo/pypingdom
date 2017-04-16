@@ -29,8 +29,15 @@ class Api(object):
         if email:
             self.headers['Account-Email'] = email
 
-    def send(self, method, resource, resource_id="", data={}, params={}):
-        response = requests.request(method, self.base_url + resource + "/" + str(resource_id), auth=self.auth, headers=self.headers, data=data, params=params)
+    def send(self, method, resource, resource_id=None, data={}, params={}):
+        if resource_id is not None:
+            resource = "%s/%s" % (resource, resource_id)
+        response = requests.request(method, self.base_url + resource + "/",
+                                    auth=self.auth,
+                                    headers=self.headers,
+                                    data=data,
+                                    params=params
+                                    )
         if response.status_code != 200:
             raise ApiError(response)
         else:
