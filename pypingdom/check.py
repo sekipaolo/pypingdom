@@ -20,6 +20,9 @@ class Check(object):
         attr = ["{0}: {1} ".format(k, v) for k, v in self.__dict__.items() if k not in self.SKIP_ON_PRINT]
         return "\npingdom.Check <%s> \n  %s" % (self._id, "\n  ".join(attr))
 
+    def __contains__(self, x):
+        return x in self.__dict__
+
     def to_json(self):
         obj = {}
         for k, v in self.__dict__.items():
