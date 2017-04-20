@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 __author__ = 'Paolo Sechi <sekipaolo@gmail.com>'
 __license__ = "Apache v2.0"
 

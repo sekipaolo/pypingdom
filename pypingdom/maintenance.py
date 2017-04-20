@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import datetime
 import time
 
@@ -12,7 +13,7 @@ class Maintenance(object):
         elif obj:
             self.from_obj(obj)
         else:
-            raise "Missing definition: use json or obj parameter"
+            raise Exception("Missing definition: use json or obj parameter")
 
     def __repr__(self):
         checks = []
