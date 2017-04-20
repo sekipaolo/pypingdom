@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import json
 
 import requests
@@ -30,7 +31,11 @@ class Api(object):
         if email:
             self.headers['Account-Email'] = email
 
-    def send(self, method, resource, resource_id=None, data={}, params={}):
+    def send(self, method, resource, resource_id=None, data=None, params=None):
+        if data is None:
+            data = {}
+        if params is None:
+            params = {}
         if resource_id is not None:
             resource = "%s/%s" % (resource, resource_id)
         response = requests.request(method, self.base_url + resource,

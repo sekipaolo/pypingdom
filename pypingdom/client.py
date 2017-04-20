@@ -29,15 +29,17 @@ class Client(object):
         if name:
             return self.checks.get(name, None)
         elif _id:
-            for name, check in self.checks.items():
+            for _name, check in self.checks.items():
                 if check._id == _id:
                     return check
         else:
-            raise "Missing name or _id"
+            raise Exception("Missing name or _id")
 
-    def get_checks(self, filters={}):
+    def get_checks(self, filters=None):
+        if filters is None:
+            filters = {}
         res = []
-        for name, check in self.checks.items():
+        for _name, check in self.checks.items():
             if "tags" in filters and len(set(filters["tags"]).intersection(set(check.tags))) == 0:
                 continue
             res.append(check)
@@ -54,7 +56,7 @@ class Client(object):
 
     def delete_check(self, check):
         if not check._id:
-            raise "CheckNotFound %s" + check.name
+            raise Exception("CheckNotFound %s" % check.name)
         self.api.send(method='delete', resource='checks', resource_id=check._id)
         self.checks.pop(check.name, None)
 
@@ -72,7 +74,9 @@ class Client(object):
         check.fetch()
         return check
 
-    def get_maintenances(self, filters={}):
+    def get_maintenances(self, filters=None):
+        if filters is None:
+            filters = {}
         self.gui.login()
         url = "https://my.pingdom.com/newims/maintenance/xhr?limit=10000&page_id=1&_=1489571119019"
         response = self.gui.send("get", url)

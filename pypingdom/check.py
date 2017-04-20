@@ -14,7 +14,7 @@ class Check(object):
         elif obj:
             self.from_obj(obj)
         else:
-            raise "Missing check definition: use json or obj parameter"
+            raise Exception("Missing check definition: use json or obj parameter")
 
     def __repr__(self):
         attr = ["{0}: {1} ".format(k, v) for k, v in self.__dict__.items() if k not in self.SKIP_ON_PRINT]
@@ -50,13 +50,10 @@ class Check(object):
             elif k == "id":
                 self._id = v
             elif k == "status":
-                if v == "paused":
-                    self.paused = True
-                else:
-                    self.paused = False
+                self.paused = bool(v == "paused")
                 self.status = v
-            elif k == "type" and type(k) is dict:
-                self.type = v.keys()[0]
+            elif k == "type" and isinstance(k, dict):
+                self.type = list(v.keys())[0]
                 for x, y in v[self.type].items():
                     setattr(self, x, y)
             else:

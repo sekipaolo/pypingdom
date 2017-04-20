@@ -1,5 +1,7 @@
-import requests
+from __future__ import absolute_import
 import json
+
+import requests
 
 
 class PingdomGuiException(Exception):
@@ -41,7 +43,11 @@ class Gui():
             "x-requested-with": "XMLHttpRequest"
         }
 
-    def send(self, method, url, data={}, params={}):
+    def send(self, method, url, data=None, params=None):
+        if data is None:
+            data = {}
+        if params is None:
+            params = {}
         response = self.session.request(method, url, data=data, params=params, headers=self.headers)
         if response.status_code != 200:
             raise PingdomGuiException(response)
