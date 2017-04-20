@@ -1,7 +1,10 @@
 *.py[co]
+*.swp
 
 # Packages
 *.egg
+.eggs
+.cache
 *.egg-info
 dist
 build
