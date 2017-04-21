@@ -1,3 +1,5 @@
+"""Tests for the api class."""
+
 import os
 import unittest
 
@@ -7,6 +9,7 @@ from pypingdom.api import Api
 
 
 def fake_checks():
+    """Return json data for mocking."""
     resource_file = os.path.normpath('pypingdom/tests/resources/api/2.0/checks')
     return open(resource_file, mode='r').read()
 

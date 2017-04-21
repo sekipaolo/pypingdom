@@ -5,9 +5,12 @@ from .maintenance import Maintenance
 
 
 class Client(object):
-    """ Interact with API and GUI """
+    """Interact with API and GUI."""
+
     def __init__(self, username, password, apikey, email, api_version='2.0'):
         """
+        Initializer.
+
         :param username: account main email
         :param password: account password
         :param apikey: Pingdom api key
