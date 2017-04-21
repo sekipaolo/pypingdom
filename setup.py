@@ -1,3 +1,4 @@
+"""Well this is our setup tools definition for this project."""
 import os
 
 from setuptools import setup
