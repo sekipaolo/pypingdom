@@ -1,0 +1,58 @@
+{
+        "checks": [
+            {
+                "hostname": "example.com",
+                "id": 85975,
+                "lasterrortime": 1297446423,
+                "lastresponsetime": 355,
+                "lasttesttime": 1300977363,
+                "name": "My check 1",
+                "resolution": 1,
+                "status": "up",
+                "type": "http",
+                "tags": [
+                    {
+                        "name": "apache",
+                        "type": "a",
+                        "count": 2
+                    }
+                ]
+            },
+            {
+                "hostname": "mydomain.com",
+                "id": 161748,
+                "lasterrortime": 1299194968,
+                "lastresponsetime": 1141,
+                "lasttesttime": 1300977268,
+                "name": "My check 2",
+                "resolution": 5,
+                "status": "up",
+                "type": "ping",
+                "tags": [
+                    {
+                        "name": "nginx",
+                        "type": "u",
+                        "count": 1
+                    }
+                ]
+            },
+            {
+                "hostname": "example.net",
+                "id": 208655,
+                "lasterrortime": 1300527997,
+                "lastresponsetime": 800,
+                "lasttesttime": 1300977337,
+                "name": "My check 3",
+                "resolution": 1,
+                "status": "down",
+                "type": "http",
+                "tags": [
+                    {
+                        "name": "apache",
+                        "type": "a",
+                        "count": 2
+                    }
+                ]
+            }
+        ]
+    }
