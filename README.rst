@@ -1,5 +1,5 @@
 Pypingdom
-=====================================
+=========
 
 .. image:: https://travis-ci.org/sekipaolo/pypingdom.svg?branch=master
     :target: https://travis-ci.org/sekipaolo/pypingdom
@@ -11,7 +11,7 @@ Python library for interact with Pingdom services (REST API and maintenance wind
 
 
 Features
--------------------------------------
+--------
 
 
 * Support for `Multi-User Authentication <https://www.pingdom.com/resources/api#multi-user+authentication>`_
@@ -20,11 +20,13 @@ Features
 
 .. warning::
 
-    Since the Pingdom REST API don't support maintenance windows, we interact with the Website for it. Therefore this feature is hightly fragile and can *break* at any monment due to frontent changes on Pingdom website.
+    Since the Pingdom REST API don't support maintenance windows, we interact
+    with the Website for it. Therefore this feature is highly fragile and can
+    *break* at any moment due to frontend changes on the Pingdom website.
 
 
 Requirements
--------------------------------------
+------------
 
 
 * Pingdom account
@@ -32,7 +34,7 @@ Requirements
 
 
 Installation
--------------------------------------
+------------
 
 .. code-block:: python
 
@@ -40,9 +42,10 @@ Installation
 
 
 Usage
--------------------------------------
+-----
 
-The `client` object will allow you to interact both with the REST Api and the GUI (for manintenance windows)
+The `client` object will allow you to interact both with the REST API and the
+GUI (for maintenance windows).
 
 .. code-block:: python
 
@@ -52,21 +55,24 @@ The `client` object will allow you to interact both with the REST Api and the GU
                             apikey="your_api_key",
                             email="your_email")
 
-the `email` parameter is required for `Multi-User Authentication <https://www.pingdom.com/resources/api#multi-user+authentication>`_.
+the `email` parameter is required for `Multiuser Authentication <https://www.pingdom.com/resources/api#multi-user+authentication>`_.
 
 Checks
--------------------------------------
+------
 
 
-Since Pingdom do not treat the check name as identifier (as we probably want to do) the client object will retrieve the check list from the API and cache it as dict ( check_name => check_instance). You can access it through the `checks` atrribute:
+Since Pingdom does not treat the check name as identifier (as we probably want
+to do) the client object will retrieve the check list from the API and cache it
+as a dictionary ( check_name => check_instance). You can access it through the
+`checks` attribute:
 
 .. code-block:: python
 
-    >>> client.checks["my awsome check"]
+    >>> client.checks["my awesome check"]
     pingdom.Check <1895866>
       autoresolve: 0
       alert_policy: 2118909
-      name: Diageo
+      name: example_com
       created: 1448565930
       lasterrortime: 1489325292
       resolution: 1
@@ -81,15 +87,15 @@ Since Pingdom do not treat the check name as identifier (as we probably want to 
       type: http
       tags: []
 
-a better way to retrive a check would be:
+a better way to retrieve a check would be:
 
 .. code-block:: python
 
-    >>> client.get_check("my awsom check")
+    >>> client.get_check("my awesome check")
 
 that will return None if the check doesn't exists
 
-List checks with `production` and `fromtend` tags:
+List checks with `production` and `frontend` tags:
 
 .. code-block:: python
 
@@ -100,7 +106,7 @@ Create a check:
 .. code-block:: python
 
     >>> check_definition = {
-            "name": "My awsome check",
+            "name": "My awesome check",
             "paused": True,
             "alert_policy": 201745,
             "type": "http",
@@ -117,7 +123,7 @@ Create a check:
 
 Refers to `this page <https://www.pingdom.com/resources/api#MethodCreate+New+Check>`_ for the list of options.
 
-`alert_policy`: can be set to the `id` of an existing alert policy or omitted to disable alerts. Once created the alert policy can be changed but not disabled (API restriction)
+`alert_policy`: can be set to the `id` of an existing alert policy or omitted to disable alerts. Once created, the alert policy can be changed but not disabled (API restriction).
 
 Update a check:
 
@@ -125,7 +131,8 @@ Update a check:
 
     >>> client.update_check(check, {"paused": True})
 
-this will retrun True if an effective change was sent to the API and False otherwise (userful for idempotency usage, like ansible modules)
+this will return True if an effective change was sent to the API and False
+otherwise (useful for idempotent usage, like ansible modules)
 
 Delete a check:
 
@@ -135,9 +142,9 @@ Delete a check:
 
 
 Maintenance windows
--------------------------------------
+-------------------
 
-Retrive maintenances windows for production websites in the last 7 days
+Retreive maintenance windows for production websites in the last 7 days:
 
 .. code-block:: python
 
@@ -146,16 +153,16 @@ Retrive maintenances windows for production websites in the last 7 days
     >>> start = datetime.datetime.now() - datetime.timedelta(days=7)
     >>> client.get_maintenances(filters={"checks": checks, "after": start}):
 
-Create a 1 hour maintenance window for production websites
+Create a 1 hour maintenance window for production websites:
 
 .. code-block:: python
 
     >>> start = datetime.datetime.now() + datetime.timedelta(minutes=10)
     >>> end = start + datetime.timedelta(hours=1)
 
-    >>> window = client.create_maintenance(filters={"checks": checks, "name": "pypyngdom test maintenance", "start": start, "stop": stop})
+    >>> window = client.create_maintenance(filters={"checks": checks, "name": "pypingdom test maintenance", "start": start, "stop": stop})
 
-Delete futures maintenance windows
+Delete future maintenance windows:
 
 .. code-block:: python
 
