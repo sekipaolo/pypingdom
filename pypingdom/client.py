@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from .api import Api
 from .gui import Gui
 from .check import Check
@@ -26,11 +28,11 @@ class Client(object):
         # cache checks
         self.checks = {}
         for item in self.api.send('get', "checks", params={"include_tags": True})['checks']:
-            self.checks[item["name"].lower()] = Check(self.api, name=item["name"], json=item)
+            self.checks[item["name"].lower()] = Check(name=item["name"], json=item)
 
     def get_check(self, name=None, _id=None):
         if name:
-            return self.checks.get(name, None)
+            return self.checks.get(name.lower(), None)
         elif _id:
             for _name, check in self.checks.items():
                 if check._id == _id:
@@ -49,11 +51,11 @@ class Client(object):
         return res
 
     def create_check(self, name, obj):
-        c = Check(self.api, name, obj=obj)
+        c = Check(name, obj=obj)
         data = c.to_json()
         response = self.api.send(method='post', resource='checks', data=data)
         c._id = int(response["check"]["id"])
-        c.fetch()
+        c.from_json(self.api.send('get', "checks", response["check"]["id"])['check'])
         self.checks[name] = c
         return c
 
@@ -65,8 +67,8 @@ class Client(object):
 
     def update_check(self, check, obj):
         # ensure definition is updated
-        check.fetch()
-        # cache current definition to detect idempotency when modify is called
+        check.from_json(self.api.send('get', "checks", check._id)['check'])
+        # cache current definition to detect idempotence when modify is called
         cached_definition = check.to_json()
         check.from_obj(obj)
         data = check.to_json()
@@ -74,7 +76,7 @@ class Client(object):
             return False
         del data["type"]  # type can't be changed
         self.api.send(method='put', resource='checks', resource_id=check._id, data=data)
-        check.fetch()
+        check.from_json(self.api.send('get', "checks", check._id)['check'])
         return check
 
     def get_maintenances(self, filters=None):
