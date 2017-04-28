@@ -45,14 +45,7 @@
                 "name": "My check 3",
                 "resolution": 1,
                 "status": "down",
-                "type": "http",
-                "tags": [
-                    {
-                        "name": "apache",
-                        "type": "a",
-                        "count": 2
-                    }
-                ]
+                "type": "http"
             }
         ]
     }
