@@ -9,8 +9,7 @@ class Check(object):
         "lasttesttime", "_id", "id", "status"
     ]
 
-    def __init__(self, name, json=False, obj=False):
-        self.name = name
+    def __init__(self, json=False, obj=False):
         if json:
             self.from_json(json)
         elif obj:
@@ -30,7 +29,7 @@ class Check(object):
         for k, v in self.__dict__.items():
             if k in self.SKIP_ON_JSON:
                 pass
-            elif k == "tags":
+            elif k == "tags" and len(v):
                 obj["tags"] = ",".join(v)
             elif k == "requestheaders":
                 i = 0
@@ -46,7 +45,7 @@ class Check(object):
             if k == "tags":
                 self.tags = [x["name"] for x in v]
             if k == "name":
-                self.name = v.lower()
+                self.name = v
             elif k == "hostname":
                 self.host = v
             elif k == "id":
@@ -60,7 +59,11 @@ class Check(object):
                     setattr(self, x, y)
             else:
                 setattr(self, k, v)
+        if 'tags' not in self:
+            self.tags = []
 
     def from_obj(self, obj):
         for k, v in obj.items():
             setattr(self, k, v)
+        if 'tags' not in self:
+            self.tags = []
