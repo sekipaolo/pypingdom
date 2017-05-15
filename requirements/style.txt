@@ -1,4 +1,4 @@
 # pydocstyle 2.0 doesn't work with flake8 (yet)
-pydocstyle==1.1.1
-flake8_docstrings
-flake8
+pydocstyle==2.0.0
+flake8-docstrings==1.1.0
+flake8==3.3.0
