@@ -1,4 +1,5 @@
 #!/usr/sbin/env python
+# -*- coding: utf-8 -*-
 import yaml
 import datetime
 
