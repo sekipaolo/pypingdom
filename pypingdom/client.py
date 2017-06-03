@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
 from .api import Api
@@ -115,3 +116,13 @@ class Client(object):
 
     def servertime(self):
         return self.api.send(method='get', resource='servertime')['servertime']
+
+    def get_summary_outage(self, checkid, start=None, end=None, order="asc"):
+        params = {}
+        if start is not None:
+            params['from'] = start
+        if end is not None:
+            params['to'] = end
+        if order is not None:
+            params['order'] = order
+        return self.api.send('get', resource="summary.outage", resource_id=checkid, params=params)

@@ -17,6 +17,7 @@ Features
 * Support for `Multi-User Authentication <https://www.pingdom.com/resources/api#multi-user+authentication>`_
 * Check management: create, delete, update, list
 * Maintenance windows: create, delete, list
+* Fetching outage summaries
 
 .. warning::
 

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Well this is our setup tools definition for this project."""
 import os
 

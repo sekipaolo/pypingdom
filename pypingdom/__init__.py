@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """This is the pypingdom package."""
 
 from __future__ import absolute_import
