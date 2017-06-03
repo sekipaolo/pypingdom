@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Tests for the Check class."""
 
 from __future__ import absolute_import
@@ -11,7 +12,8 @@ from pypingdom import check
 
 def mock_data(path):
     """Return json data for mocking."""
-    resource_file = os.path.join(os.path.normpath('pypingdom/tests/resources'), path.lstrip('/'))
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    resource_file = os.path.join(dir_path, os.path.normpath('resources'), path.lstrip('/'))
     return open(resource_file, mode='r').read()
 
 
