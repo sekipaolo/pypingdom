@@ -4,13 +4,14 @@ from __future__ import absolute_import
 
 class Check(object):
 
-    SKIP_ON_PRINT = ["cached_definition", "_id"]
+    SKIP_ON_PRINT = ["cached_definition", "_id", "api"]
     SKIP_ON_JSON = [
-        "alert_policy_name", "cached_definition", "created", "lastresponsetime",
-        "lasttesttime", "_id", "id", "status"
+        "api", "alert_policy_name", "cached_definition", "created", "lastresponsetime",
+        "lasttesttime", "lasterrortime", "_id", "id", "status"
     ]
 
-    def __init__(self, json=False, obj=False):
+    def __init__(self, api, json=False, obj=False):
+        self.api = api
         if json:
             self.from_json(json)
         elif obj:
@@ -28,10 +29,11 @@ class Check(object):
     def to_json(self):
         obj = {}
         for k, v in self.__dict__.items():
+
             if k in self.SKIP_ON_JSON:
                 pass
             elif k == "tags" and len(v):
-                obj["tags"] = ",".join(v)
+                obj["tags"] = ",".join(map(lambda x: x['name'], v))
             elif k == "requestheaders":
                 i = 0
                 for x, y in v.items():
@@ -68,3 +70,8 @@ class Check(object):
             setattr(self, k, v)
         if 'tags' not in self:
             self.tags = []
+
+    def fetch(self):
+        res = self.api.send('get', "checks", self._id)['check']
+        self.from_json(res)
+
