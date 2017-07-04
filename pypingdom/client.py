@@ -29,7 +29,7 @@ class Client(object):
         # cache checks
         self.checks = {}
         for item in self.api.send('get', "checks", params={"include_tags": True})['checks']:
-            self.checks[item["name"]] = Check(json=item)
+            self.checks[item["name"]] = Check(self.api, json=item)
 
     def get_check(self, name=None, _id=None):
         if name:
@@ -52,7 +52,7 @@ class Client(object):
         return res
 
     def create_check(self, name, obj):
-        c = Check(obj=obj)
+        c = Check(self.api, obj=obj)
         data = c.to_json()
         response = self.api.send(method='post', resource='checks', data=data)
         c._id = int(response["check"]["id"])
@@ -66,12 +66,12 @@ class Client(object):
         self.api.send(method='delete', resource='checks', resource_id=check._id)
         self.checks.pop(check.name, None)
 
-    def update_check(self, check, obj):
+    def update_check(self, check, changes):
         # ensure definition is updated
-        check.from_json(self.api.send('get', "checks", check._id)['check'])
+        check.fetch()
         # cache current definition to detect idempotence when modify is called
         cached_definition = check.to_json()
-        check.from_obj(obj)
+        check.from_obj(changes)
         data = check.to_json()
         if data == cached_definition:
             return False

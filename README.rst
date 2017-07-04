@@ -124,7 +124,16 @@ Create a check:
 
 Refers to `this page <https://www.pingdom.com/resources/api#MethodCreate+New+Check>`_ for the list of options.
 
-`alert_policy`: can be set to the `id` of an existing alert policy or omitted to disable alerts. Once created, the alert policy can be changed but not disabled (API restriction).
+When you create or modify a check some related entity need to be referenced by id:
+
+*Integrations*
+
+To enable/disable an integration plugins (like webhooks) use the field `integrationids` (array with integer ids to set or "null" tring to remove it)
+
+*Alert policies*
+
+To bind an alerting policy use the field `alert_policy` (numeric id to set it or string "null" to disable alerts)
+
 
 Update a check:
 

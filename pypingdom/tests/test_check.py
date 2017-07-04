@@ -26,7 +26,7 @@ class CheckTestCase(unittest.TestCase):
 
     def test_check(self):
         """Test basic attributes."""
-        acheck = check.Check(self.checks[0])
+        acheck = check.Check(None, self.checks[0])
         self.assertEqual(acheck.name, self.checks[0]["name"])
         self.assertFalse("fubar" in acheck.tags)
         self.assertEqual(len(acheck.tags), len(self.checks[0]["tags"]))
@@ -34,6 +34,6 @@ class CheckTestCase(unittest.TestCase):
     def test_check_notags(self):
         """Test that a check with no tags."""
         self.assertTrue("tags" not in self.checks[2])  # just to be sure ;-)
-        acheck = check.Check(self.checks[2])
+        acheck = check.Check(None, self.checks[2])
         self.assertTrue(isinstance(acheck.tags, list))
         self.assertEqual(len(acheck.tags), 0)
