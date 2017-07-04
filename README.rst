@@ -130,7 +130,7 @@ When you create or modify a check some related entity need to be referenced by i
 
 To enable/disable an integration plugins (like webhooks) use the field `integrationids` (array with integer ids to set or "null" tring to remove it)
 
-** Alert policies*
+*Alert policies*
 
 To bind an alerting policy use the field `alert_policy` (numeric id to set it or string "null" to disable alerts)
 
