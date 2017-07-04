@@ -14,7 +14,7 @@ with open(os.path.join(BASEDIR, 'README.rst'), 'r') as f:
 
 
 setup(name='pypingdom',
-      version="0.0.6",
+      version="0.1.0",
       description='Client for Pingdom Services',
       long_description=README,
       author='Paolo Sechi',
