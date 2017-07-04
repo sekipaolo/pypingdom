@@ -74,4 +74,3 @@ class Check(object):
     def fetch(self):
         res = self.api.send('get', "checks", self._id)['check']
         self.from_json(res)
-
