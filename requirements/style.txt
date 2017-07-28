@@ -1,5 +1,5 @@
 # pydocstyle 2.0 doesn't work with flake8 (yet)
 pydocstyle==2.0
 flake8_docstrings==1.1.0
-flake8==3.3.0
+flake8==3.4.0
 bandit
