@@ -2,4 +2,4 @@
 pydocstyle==2.0
 flake8_docstrings==1.1.0
 flake8==3.3.0
-bandit
+bandit==1.4.0
