@@ -46,7 +46,7 @@ class Client(object):
             filters = {}
         res = []
         for _name, check in self.checks.items():
-            if "tags" in filters and len(set(filters["tags"]).intersection(set(check.tags))) == 0:
+            if "tags" in filters and len(set(filters["tags"]).intersection(set([x['name'] for x in check.tags]))) == 0:
                 continue
             res.append(check)
         return res

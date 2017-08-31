@@ -159,9 +159,9 @@ Retreive maintenance windows for production websites in the last 7 days:
 .. code-block:: python
 
     >>> import datetime
-    >>> checks = client.get_checks(filters={"tags": ["production": "frontend"]})
+    >>> checks = client.get_checks(filters={"tags": ["production", "frontend"]})
     >>> start = datetime.datetime.now() - datetime.timedelta(days=7)
-    >>> client.get_maintenances(filters={"checks": checks, "after": start}):
+    >>> client.get_maintenances(filters={"checks": checks, "after": start})
 
 Create a 1 hour maintenance window for production websites:
 
@@ -170,7 +170,7 @@ Create a 1 hour maintenance window for production websites:
     >>> start = datetime.datetime.now() + datetime.timedelta(minutes=10)
     >>> end = start + datetime.timedelta(hours=1)
 
-    >>> window = client.create_maintenance(filters={"checks": checks, "name": "pypingdom test maintenance", "start": start, "stop": stop})
+    >>> window = client.create_maintenance({"checks": checks, "name": "pypingdom test maintenance", "start": start, "stop": end})
 
 Delete future maintenance windows:
 
