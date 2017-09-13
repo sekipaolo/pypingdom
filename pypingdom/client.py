@@ -44,12 +44,7 @@ class Client(object):
     def get_checks(self, filters=None):
         if filters is None:
             filters = {}
-        res = []
-        for _name, check in self.checks.items():
-            if "tags" in filters and len(set(filters["tags"]).intersection(set([x['name'] for x in check.tags]))) == 0:
-                continue
-            res.append(check)
-        return res
+        return [c for c in self.checks.values() if len(set(filters.get("tags", [])).intersection(set([x['name'] for x in c.tags]))) == 0]
 
     def create_check(self, name, obj):
         c = Check(self.api, obj=obj)
