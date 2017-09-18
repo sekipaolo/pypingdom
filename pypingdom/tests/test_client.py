@@ -52,3 +52,22 @@ class ClientTestCase(unittest.TestCase):
         res = client.get_summary_outage("85975")
         self.assertTrue("summary" in res)
         self.assertTrue("states" in res['summary'])
+
+    @requests_mock.Mocker()
+    def test_get_checks(self, m):
+        """Test a simple request."""
+        base_url = "https://api.pingdom.com"
+        fakepath = "/api/2.0/checks"
+        m.request('get', base_url + fakepath, text=mock_data(fakepath))
+
+        client = Client(username="username",
+                        password="password",
+                        apikey="apikey",
+                        email="email")
+
+        res = client.get_checks()
+        self.assertEqual(len(res), 3)
+        self.assertTrue(all(isinstance(x, Check) for x in res))
+
+        res = client.get_checks(filters={"tags": ['apache']})
+        self.assertEqual(len(res), 2)
