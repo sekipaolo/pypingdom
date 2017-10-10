@@ -36,7 +36,7 @@ class Maintenance(object):
                    ", ".join(checks))
 
     def to_json(self):
-        check_ids = [str(check._id) for check in self.checks]
+        check_ids = [str(check._id) for check in self.checks if check]
         data = {
             # "__csrf_magic": "",
             # "id": "",
