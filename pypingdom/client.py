@@ -43,7 +43,7 @@ class Client(object):
 
     def get_checks(self, filters=None):
         if filters is None:
-            filters = {}
+            return [c for c in self.checks.values()]
         return [c for c in self.checks.values() if not len(set(filters.get("tags", [])).intersection(set([x['name']
                 for x in c.tags]))) == 0]
 

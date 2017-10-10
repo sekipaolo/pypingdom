@@ -70,4 +70,4 @@ class ClientTestCase(unittest.TestCase):
         self.assertTrue(all(isinstance(x, Check) for x in res))
 
         res = client.get_checks(filters={"tags": ['apache']})
-        self.assertEqual(len(res), 2)
+        self.assertEqual(len(res), 1)
