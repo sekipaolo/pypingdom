@@ -47,7 +47,7 @@ class Check(object):
         for k, v in obj.items():
             if k == "tags":
                 self.tags = [x["name"] for x in v]
-            if k == "name":
+            elif k == "name":
                 self.name = v
             elif k == "hostname":
                 self.host = v
