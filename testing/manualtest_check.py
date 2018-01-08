@@ -9,7 +9,7 @@ import pypingdom
 
 
 with open("private_test_data.yml", 'r') as stream:
-    auth = yaml.load(stream)
+    auth = yaml.safe_load(stream)
 
 client = pypingdom.Client(username=auth["username"],
                           password=auth["password"],
@@ -39,7 +39,7 @@ def clean():
         client.delete_check(check)
     checks = client.get_checks(filters={"tags": ["pypingdom-test"]})
     print(checks)
-    assert checks == []
+    assert checks == []  # nosec
 
 
 def create_check():
@@ -47,7 +47,7 @@ def create_check():
     c = client.create_check(check_definition["name"], check_definition)
     print("created %s" % c.name)
     check = client.get_check(check_definition["name"])
-    assert check is not None
+    assert check is not None  # nosec
 
 
 def update_check():
@@ -55,7 +55,7 @@ def update_check():
     check = client.get_check(check_definition["name"])
     print("updating check %s" % check.name)
     newcheck = client.update_check(check, {"requestheaders": {'XCustom': 'new header value'}})
-    assert newcheck.requestheaders["XCustom"] == 'new header value'
+    assert newcheck.requestheaders["XCustom"] == 'new header value'  # nosec
 
 
 def delete_check():
@@ -64,7 +64,7 @@ def delete_check():
     print("deleting check %s" % check.name)
     client.delete_check(check)
     check = client.get_check(check_definition["name"])
-    assert check is None
+    assert check is None  # nosec
 
 
 def create_maintenance():
@@ -74,11 +74,11 @@ def create_maintenance():
     stop = start + datetime.timedelta(minutes=20)
     print("creating maintenance for check %s" % check.name)
     window = client.create_maintenance({
-                                        "checks": [check],
-                                        "name": "pypyngdom test maintenance",
-                                        "start": start,
-                                        "stop": stop
-                                       })
+        "checks": [check],
+        "name": "pypyngdom test maintenance",
+        "start": start,
+        "stop": stop
+    })
     return window
 
 

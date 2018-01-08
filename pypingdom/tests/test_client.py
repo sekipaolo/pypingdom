@@ -33,7 +33,7 @@ class ClientTestCase(unittest.TestCase):
         fakepath = "/api/2.0/summary.outage/85975"
         m.request('get', base_url + fakepath, text=mock_data(fakepath))
 
-        client = Client(username="username",
+        client = Client(username="username",  # nosec
                         password="password",
                         apikey="apikey",
                         email="email")
@@ -60,7 +60,7 @@ class ClientTestCase(unittest.TestCase):
         fakepath = "/api/2.0/checks"
         m.request('get', base_url + fakepath, text=mock_data(fakepath))
 
-        client = Client(username="username",
+        client = Client(username="username",  # nosec
                         password="password",
                         apikey="apikey",
                         email="email")

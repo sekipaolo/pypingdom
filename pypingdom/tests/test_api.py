@@ -24,7 +24,7 @@ class ApiTestCase(unittest.TestCase):
     @requests_mock.Mocker()
     def test_request(self, m):
         """Test a simple request."""
-        api = Api(username="testuser", password="testpass", apikey="mocked")
+        api = Api(username="testuser", password="testpass", apikey="mocked")  # nosec
         m.request('get', api.base_url + "checks", text=mock_data('/api/2.0/checks'))
         res = api.send('get', "checks", params={"include_tags": True})
         self.assertTrue("checks" in res)
