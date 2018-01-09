@@ -7,7 +7,7 @@ Pypingdom
 .. image:: https://badge.fury.io/py/pypingdom.svg
     :target: https://badge.fury.io/py/pypingdom
 
-Python library for interact with Pingdom services (REST API and maintenance windows).
+Python library for interacting with Pingdom services (REST API and maintenance windows).
 
 
 Features
