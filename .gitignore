@@ -26,3 +26,4 @@ pip-log.txt
 
 .DS_Store
 private_test_data.yml
+.envrc

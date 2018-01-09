@@ -1,0 +1,10 @@
+include AUTHORS
+include LICENSE
+include Makefile
+include tox.ini
+recursive-include docs *.py
+recursive-include docs *.rst
+recursive-include pypingdom *.py
+recursive-include requirements *.txt
+recursive-include testing *.py
+recursive-include pypingdom/tests/resources *

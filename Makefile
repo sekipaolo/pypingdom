@@ -1,27 +1,22 @@
-# Minimal makefile for Sphinx documentation
+# Minimal makefile
 #
 
-# You can set these variables from the command line.
-SPHINXOPTS    =
-SPHINXBUILD   = sphinx-build
-SPHINXPROJ    = pypingdom
-SOURCEDIR     = docs/source
-BUILDDIR      = docs/build
 
-# Put it first so that "make" without argument is like "make help".
-help:
-	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+.PHONY: publish
+publish:
+	@echo "make clean"
+	@echo "python setup.py sdist bdist_wheel"
+	@echo "twine"
 
-.PHONY: help Makefile tests push
+.PHONY: clean
+clean:
+	@echo "Cleaning up distutils and tox stuff"
+	rm -rf build dist deb_dist
+	rm -rf *.egg .eggs *.egg-info
+	rm -rf .tox
+	@echo "Cleaning up byte compiled python stuff"
+	find . -regex "\(.*__pycache__.*\|*.py[co]\)" -delete
 
-push:
-	python setup.py register -r pypi
-	python setup.py sdist upload -r pypi
-	python setup.py bdist_wheel upload -r pypi
-
+.PHONY: tests
 tests:
-	python testing/test_check.py
-# Catch-all target: route all unknown targets to Sphinx using the new
-# "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
-%: Makefile
-	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+	python testing/manualtest_check.py
