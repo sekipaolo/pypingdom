@@ -1,11 +1,17 @@
 Pypingdom
 =========
 
+.. image:: https://img.shields.io/pypi/v/pypingdom.svg
+    :target: https://pypi.python.org/pypi/pypingdom
+
+.. image:: https://img.shields.io/pypi/l/pypingdom.svg
+    :target: https://pypi.python.org/pypi/pypingdom
+
+.. image:: https://img.shields.io/pypi/pyversions/pypingdom.svg
+    :target: https://pypi.python.org/pypi/pypingdom
+
 .. image:: https://travis-ci.org/sekipaolo/pypingdom.svg?branch=master
     :target: https://travis-ci.org/sekipaolo/pypingdom
-
-.. image:: https://badge.fury.io/py/pypingdom.svg
-    :target: https://badge.fury.io/py/pypingdom
 
 Python library for interacting with Pingdom services (REST API and maintenance windows).
 
