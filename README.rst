@@ -122,10 +122,10 @@ Create a check:
             "requestheaders": {
                 'XCustom': 'my header value'
             },
-            "tags": ["pypingdom-test", "custom-tag"],
+            "tags": [{"name": "pypingdom-test"}, {"name": "custom-tag"}],
             "encryption": False
         }
-    >>> client.update_check(check, check_definition)
+    >>> client.create_check('My awesome check', check_definition)
 
 
 Refers to `this page <https://www.pingdom.com/resources/api#MethodCreate+New+Check>`_ for the list of options.
