@@ -125,7 +125,7 @@ Create a check:
             "tags": [{"name": "pypingdom-test"}, {"name": "custom-tag"}],
             "encryption": False
         }
-    >>> client.create_check('My awesome check', check_definition)
+    >>> client.create_check(check_definition)
 
 
 Refers to `this page <https://www.pingdom.com/resources/api#MethodCreate+New+Check>`_ for the list of options.

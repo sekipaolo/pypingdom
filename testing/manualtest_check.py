@@ -44,7 +44,7 @@ def clean():
 
 def create_check():
     global client, check_definition
-    c = client.create_check(check_definition["name"], check_definition)
+    c = client.create_check(check_definition)
     print("created %s" % c.name)
     check = client.get_check(check_definition["name"])
     assert check is not None  # nosec

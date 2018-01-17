@@ -47,13 +47,13 @@ class Client(object):
         return [c for c in self.checks.values() if not len(set(filters.get("tags", [])).intersection(set([x['name']
                 for x in c.tags]))) == 0]
 
-    def create_check(self, name, obj):
+    def create_check(self, obj):
         c = Check(self.api, obj=obj)
         data = c.to_json()
         response = self.api.send(method='post', resource='checks', data=data)
         c._id = int(response["check"]["id"])
         c.from_json(self.api.send('get', "checks", response["check"]["id"])['check'])
-        self.checks[name] = c
+        self.checks[c.name] = c
         return c
 
     def delete_check(self, check):
