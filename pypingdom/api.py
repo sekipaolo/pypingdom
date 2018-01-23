@@ -9,7 +9,7 @@ from requests.auth import HTTPBasicAuth
 class ApiError(Exception):
 
     def __init__(self, http_response):
-        content = json.loads(http_response.content)
+        content = json.loads(http_response.content.decode('utf-8'))
         self.status_code = http_response.status_code
         self.status_desc = content['error']['statusdesc']
         self.error_message = content['error']['errormessage']
