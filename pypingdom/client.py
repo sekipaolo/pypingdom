@@ -122,3 +122,20 @@ class Client(object):
         if order is not None:
             params['order'] = order
         return self.api.send('get', resource="summary.outage", resource_id=checkid, params=params)
+
+    def get_uptime(self, checkid, start=None, end=None, probes=None, include_uptime=None, by_country=None,
+                   by_probe=None):
+        params = {}
+        if start is not None:
+            params['from'] = start
+        if end is not None:
+            params['to'] = end
+        if probes is not None:
+            params['probes'] = probes
+        if include_uptime is not None:
+            params['includeuptime'] = include_uptime
+        if by_country is not None:
+            params['bycountry'] = by_country
+        if by_probe is not None:
+            params['byprobe'] = by_probe
+        return self.api.send('get', resource="summary.average", resource_id=checkid, params=params)
