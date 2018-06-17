@@ -5,8 +5,8 @@
 .PHONY: publish
 publish:
 	@echo "make clean"
-	@echo "python setup.py sdist bdist_wheel"
-	@echo "twine"
+	@echo "tox -e build"
+	@echo "tox -e release"
 
 .PHONY: clean
 clean:
