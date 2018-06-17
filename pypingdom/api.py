@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
-import json
 
 import requests
 from requests.auth import HTTPBasicAuth
@@ -9,7 +8,7 @@ from requests.auth import HTTPBasicAuth
 class ApiError(Exception):
 
     def __init__(self, http_response):
-        content = json.loads(http_response.content)
+        content = http_response.json()
         self.status_code = http_response.status_code
         self.status_desc = content['error']['statusdesc']
         self.error_message = content['error']['errormessage']

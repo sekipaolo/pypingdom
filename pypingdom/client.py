@@ -47,13 +47,13 @@ class Client(object):
         return [c for c in self.checks.values() if not len(set(filters.get("tags", [])).intersection(set([x['name']
                 for x in c.tags]))) == 0]
 
-    def create_check(self, name, obj):
+    def create_check(self, obj):
         c = Check(self.api, obj=obj)
         data = c.to_json()
         response = self.api.send(method='post', resource='checks', data=data)
         c._id = int(response["check"]["id"])
         c.from_json(self.api.send('get', "checks", response["check"]["id"])['check'])
-        self.checks[name] = c
+        self.checks[c.name] = c
         return c
 
     def delete_check(self, check):
@@ -112,6 +112,23 @@ class Client(object):
 
     def servertime(self):
         return self.api.send(method='get', resource='servertime')['servertime']
+
+    def get_summary_average(self, checkid, start=None, end=None, probes=None, include_uptime=None, by_country=None,
+                            by_probe=None):
+        params = {}
+        if start is not None:
+            params['from'] = start
+        if end is not None:
+            params['to'] = end
+        if probes is not None:
+            params['probes'] = probes
+        if include_uptime is not None:
+            params['includeuptime'] = include_uptime
+        if by_country is not None:
+            params['bycountry'] = by_country
+        if by_probe is not None:
+            params['byprobe'] = by_probe
+        return self.api.send('get', resource="summary.average", resource_id=checkid, params=params)
 
     def get_summary_outage(self, checkid, start=None, end=None, order="asc"):
         params = {}
