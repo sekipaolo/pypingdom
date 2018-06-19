@@ -125,7 +125,7 @@ Create a check:
             "tags": [{"name": "pypingdom-test"}, {"name": "custom-tag"}],
             "encryption": False
         }
-    >>> client.create_check('My awesome check', check_definition)
+    >>> client.create_check(check_definition)
 
 
 Refers to `this page <https://www.pingdom.com/resources/api#MethodCreate+New+Check>`_ for the list of options.
@@ -185,3 +185,16 @@ Delete future maintenance windows:
     >>> windows = client.get_maintenances(filters={"checks": checks, "after": datetime.datetime.now()}):
     >>> for m in maintenances:
         client.delete_maintenance(m)
+
+
+Reporting/summary
+-------------------
+
+Retrieve average response time and uptime summaries:
+
+.. code-block:: python
+
+    >>> checkid = client.get_check("my awesome check")._id
+    >>> start = int(time.time()) - 30*24*60*60 # 30 days back
+    >>> end = time.time()
+    >>> client.get_summary_average(checkid, start, end, include_uptime="true")
