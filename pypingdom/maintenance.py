@@ -54,9 +54,9 @@ class Maintenance(object):
     def from_json(self, obj):
         self._id = int(obj['id'])
         self.name = obj["description"]
-        self.start = datetime.datetime.fromtimestamp(obj['start'])
-        self.stop = datetime.datetime.fromtimestamp(obj['end'])
-        self.checks = [self.client.get_check(_id=int(x['compound_id'])) for x in obj['checks']]
+        self.start = datetime.datetime.fromtimestamp(obj['from'])
+        self.stop = datetime.datetime.fromtimestamp(obj['to'])
+        self.checks = [self.client.get_check(_id=int(x)) for x in obj['checks']['uptime']]
 
     def from_obj(self, obj):
         self.name = obj["name"]
