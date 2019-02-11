@@ -25,49 +25,49 @@ class ClientTestCase(unittest.TestCase):
     @requests_mock.Mocker()
     def test_request(self, m):
         """Test a simple request."""
-        base_url = "https://api.pingdom.com"
-        fakepath = "/api/2.0/checks"
+        base_url = 'https://api.pingdom.com'
+        fakepath = '/api/2.0/checks'
         m.request('get', base_url + fakepath, text=mock_data(fakepath))
-        fakepath = "/api/2.0/servertime"
+        fakepath = '/api/2.0/servertime'
         m.request('get', base_url + fakepath, text=mock_data(fakepath))
-        fakepath = "/api/2.0/summary.outage/85975"
+        fakepath = '/api/2.0/summary.outage/85975'
         m.request('get', base_url + fakepath, text=mock_data(fakepath))
 
-        client = Client(username="username",  # nosec
-                        password="password",
-                        apikey="apikey",
-                        email="email")
+        client = Client(username='username',  # noqa: S106
+                        password='password',
+                        apikey='apikey',
+                        email='email')
 
         res = client.get_checks()
         self.assertEqual(len(res), 3)
         self.assertTrue(all(isinstance(x, Check) for x in res))
-        check1 = client.get_check(name="My check 1")
+        check1 = client.get_check(name='My check 1')
         self.assertNotEqual(check1, None)
-        check2 = client.get_check(name="My check 2")
+        check2 = client.get_check(name='My check 2')
         self.assertNotEqual(check1, check2)
 
         res = client.servertime()
         self.assertEqual(res, 1294237910)
 
-        res = client.get_summary_outage("85975")
-        self.assertTrue("summary" in res)
-        self.assertTrue("states" in res['summary'])
+        res = client.get_summary_outage('85975')
+        self.assertTrue('summary' in res)
+        self.assertTrue('states' in res['summary'])
 
     @requests_mock.Mocker()
     def test_get_checks(self, m):
         """Test a simple request."""
-        base_url = "https://api.pingdom.com"
-        fakepath = "/api/2.0/checks"
+        base_url = 'https://api.pingdom.com'
+        fakepath = '/api/2.0/checks'
         m.request('get', base_url + fakepath, text=mock_data(fakepath))
 
-        client = Client(username="username",  # nosec
-                        password="password",
-                        apikey="apikey",
-                        email="email")
+        client = Client(username='username',  # noqa: S106
+                        password='password',
+                        apikey='apikey',
+                        email='email')
 
         res = client.get_checks()
         self.assertEqual(len(res), 3)
         self.assertTrue(all(isinstance(x, Check) for x in res))
 
-        res = client.get_checks(filters={"tags": ['apache']})
+        res = client.get_checks(filters={'tags': ['apache']})
         self.assertEqual(len(res), 1)
