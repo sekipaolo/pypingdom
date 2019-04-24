@@ -71,10 +71,12 @@ class Client(object):
         data = check.to_json()
         if data == cached_definition:
             return False
-        if check.type != 'http':
-            # GET /checks (get_checks) returns 'verify_certificate' regardless
-            # check type. Remove from PUT data for non http checks
-            del data['verify_certificate']
+        # GET /checks (get_checks) returns 'verify_certificate' regardless
+        if check.type == 'http':
+            # The http-type API will only accept a parameter called 'encryption' though.
+            data['encryption'] = changes['encryption'] if 'encryption' in changes else data['verify_certificate']
+            print(data['encryption'])
+        del data['verify_certificate'] # 'verify_certificate' is not a valid parameter
         del data["type"]  # type can't be changed
         self.api.send(method='put', resource='checks', resource_id=check._id, data=data)
         check.from_json(self.api.send('get', "checks", check._id)['check'])
