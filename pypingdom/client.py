@@ -20,10 +20,6 @@ class Client(object):
         :param email: required for `Multi-User Authentication
                       <https://www.pingdom.com/resources/api#multi-user+authentication>`_.
         """
-        self.username = username
-        self.password = password
-        self.apikey = apikey
-        self.email = email
         self.api = Api(username, password, apikey, email, api_version)
         self.gui = Gui(username, password)
         # cache checks
