@@ -40,8 +40,9 @@ class Client(object):
     def get_checks(self, filters=None):
         if filters is None:
             return [c for c in self.checks.values()]
-        return [c for c in self.checks.values() if not len(set(filters.get("tags", [])).intersection(set([x['name']
-                for x in c.tags]))) == 0]
+
+        return [c for c in self.checks.values() if len(set(u + filters.get("status", c.status)
+                for u in filters.get("tags", [])).intersection(set([x['name'] + c.status for x in c.tags])))]
 
     def create_check(self, obj):
         c = Check(self.api, obj=obj)
