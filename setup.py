@@ -34,7 +34,7 @@ setup(name='pypingdom',
                    'Operating System :: OS Independent',
                    'Topic :: System :: Monitoring',
                    'Programming Language :: Python',
-                   'Programming Language :: Python :: 2.7',
-                   'Programming Language :: Python :: 3.6'
+                   'Programming Language :: Python :: 3.6',
+                   'Programming Language :: Python :: 3.7'
                    ]
       )

@@ -5,6 +5,7 @@ import requests
 from requests.auth import HTTPBasicAuth
 from packaging import version
 
+
 class ApiError(Exception):
 
     def __init__(self, http_response):
@@ -34,6 +35,7 @@ class Api(object):
         else:
             self.headers = {'Authorization': 'Bearer ' + apikey}
             self.auth = None
+
     def send(self, method, resource, resource_id=None, data=None, params=None):
         if data is None:
             data = {}

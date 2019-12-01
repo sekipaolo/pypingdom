@@ -1,3 +1,8 @@
+0.x.x
+=====
+* drop python2 support
+* add bearer token support
+
 0.2.2
 =====
 * pingdom returns `verify_certificate` instead of `encryption` for the check-ssl key
