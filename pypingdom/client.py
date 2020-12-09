@@ -10,7 +10,7 @@ from .maintenance import Maintenance
 class Client(object):
     """Interact with API and GUI."""
 
-    def __init__(self, username, password, apikey, email, api_version='2.0'):
+    def __init__(self, username:str , password: str, apikey: str, email: str, api_version: str='3.1'):
         """
         Initializer.
 
@@ -20,7 +20,11 @@ class Client(object):
         :param email: required for `Multi-User Authentication
                       <https://www.pingdom.com/resources/api#multi-user+authentication>`_.
         """
-        self.api = Api(username, password, apikey, email, api_version)
+        self.username = username
+        self.password = password
+        self.apikey = apikey
+        self.email = email
+        self.api = Api(apikey, email, api_version)
         self.gui = Gui(username, password)
         # cache checks
         self.checks = {}
@@ -40,9 +44,8 @@ class Client(object):
     def get_checks(self, filters=None):
         if filters is None:
             return [c for c in self.checks.values()]
-
-        return [c for c in self.checks.values() if len(set(u + filters.get("status", c.status)
-                for u in filters.get("tags", [])).intersection(set([x['name'] + c.status for x in c.tags])))]
+        return [c for c in self.checks.values() if not len(set(filters.get("tags", [])).intersection(set([x['name']
+                for x in c.tags]))) == 0]
 
     def create_check(self, obj):
         c = Check(self.api, obj=obj)
