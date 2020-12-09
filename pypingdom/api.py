@@ -3,7 +3,6 @@ from __future__ import absolute_import
 
 import requests
 from requests.auth import HTTPBasicAuth
-from packaging import version
 
 
 class ApiError(Exception):
@@ -25,16 +24,14 @@ class ApiError(Exception):
 
 class Api(object):
 
-    def __init__(self, username, password, apikey, email=False, apiversion="2.0"):
-        self.base_url = "https://api.pingdom.com/api/" + apiversion + "/"
-        if version.parse(apiversion) < version.parse('3.0'):
-            self.auth = HTTPBasicAuth(username, password)
-            self.headers = {'App-Key': apikey}
-            if email:
-                self.headers['Account-Email'] = email
-        else:
-            self.headers = {'Authorization': 'Bearer ' + apikey}
-            self.auth = None
+    def __init__(self, apikey: str, email: str =False, version: str="3.1"):
+        # self.auth = HTTPBasicAuth(username, password)
+        self.base_url = "https://api.pingdom.com/api/" + str(version) + '/'
+        self.headers = {'Authorization': 'Bearer ' + str(apikey),
+        'Host': 'api.pingdom.com',
+        "Connection": "keep-alive", "Cache-Control": "no-cache"}
+        if email:
+            self.headers['Account-Email'] = email
 
     def send(self, method, resource, resource_id=None, data=None, params=None):
         if data is None:
@@ -43,8 +40,9 @@ class Api(object):
             params = {}
         if resource_id is not None:
             resource = "%s/%s" % (resource, resource_id)
+        if method != 'get' and data is not None:
+            self.headers["Content-Type"]: "application/json"
         response = requests.request(method, self.base_url + resource,
-                                    auth=self.auth,
                                     headers=self.headers,
                                     data=data,
                                     params=params
