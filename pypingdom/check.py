@@ -7,7 +7,8 @@ class Check(object):
     SKIP_ON_PRINT = ["cached_definition", "_id", "api"]
     SKIP_ON_JSON = [
         "api", "alert_policy_name", "cached_definition", "created", "lastresponsetime",
-        "lasttesttime", "lasterrortime", "_id", "id", "status", "maintenanceids"
+        "lasttesttime", "lasterrortime", "lastdownstart", "lastdownend",
+        "_id", "id", "status", "maintenanceids"
     ]
 
     def __init__(self, api, json=False, obj=False):
