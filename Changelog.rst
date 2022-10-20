@@ -19,3 +19,8 @@
 * added changelog
 * switched legacy, unsupported maintenance window getter to supported rest
   api method
+
+0.3.0
+=====
+* adjusted API class to work with new Pingdom API 3.1
+* introcuded typing to constructors

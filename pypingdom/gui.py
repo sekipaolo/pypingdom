@@ -24,7 +24,7 @@ class PingdomGuiException(Exception):
 
 class Gui():
 
-    def __init__(self, username, password):
+    def __init__(self, username: str, password: str):
         self.__username = username
         self.__password = password
         self.session = requests.session()
